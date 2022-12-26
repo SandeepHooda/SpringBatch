@@ -54,8 +54,9 @@ public class BatchConfig {
 	
 	@Bean
 	public Step orderStep1() {
-		return stepBuilderFactory.get("orderStep1").<String, String> chunk(1)
-				.reader(itemReader).processor(new Processor())
+		return stepBuilderFactory.get("orderStep1").<String, String> chunk(3)
+				.reader(itemReader)
+				.processor(new Processor())
 				.writer(empWriter).build();
 	}
 
@@ -67,15 +68,7 @@ public class BatchConfig {
 	
 	
 	
-	@Bean 
-	public JpaItemWriter employeeJpaWriter() throws Exception{
-		JpaItemWriter<Employee> writer = new JpaItemWriter<Employee>();
-		writer.setEntityManagerFactory(emf);
-		writer.setUsePersist(true);
-		writer.afterPropertiesSet();
-		return writer;
-		
-	}
+
 	
 
 }

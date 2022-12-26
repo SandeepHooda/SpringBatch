@@ -1,4 +1,4 @@
-package sandeep.SpringBatch.config;
+package sandeep.SpringBatch.step;
 
 import javax.sql.DataSource;
 
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import sandeep.SpringBatch.vo.Employee;
 
 @Configuration
-public class Context {
+public class Writer {
 	
 	@Bean
 	public  JdbcBatchItemWriter<Employee> empWriter(final DataSource dataSource) {

@@ -1,30 +1,61 @@
 package sandeep.SpringBatch.step;
 
-import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
+import org.springframework.batch.item.file.FlatFileItemReader;
+import org.springframework.batch.item.file.mapping.BeanWrapperFieldSetMapper;
+import org.springframework.batch.item.file.mapping.DefaultLineMapper;
+import org.springframework.batch.item.file.mapping.FieldSetMapper;
+import org.springframework.batch.item.file.transform.DelimitedLineTokenizer;
+import org.springframework.batch.item.file.transform.LineTokenizer;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 
-public class Reader implements ItemReader<String> {
+import sandeep.SpringBatch.vo.Employee;
 
-	private String[] messages = { "javainuse.com",
-			"Welcome to Spring Batch Example",
-			"We use H2 Database for this example" };
-
-	private int count = 0;
-
-	@Override
-	public String read() throws Exception, UnexpectedInputException,
-			ParseException, NonTransientResourceException {
-
-		if (count < messages.length) {
-			return messages[count++];
-		} else {
-			count = 0;
-		}
-		return null;
-	}
-
+@Configuration
+public class Reader {
 	
+	@Autowired
+	ResourceLoader resourceLoader;
+	
+	@Bean
+	public FlatFileItemReader itemReader() {
+		FlatFileItemReader reader = new FlatFileItemReader();
+		reader.setLineMapper(lineMapper());
+		reader.setResource((new ClassPathResource("employee.csv")));
+		return reader;
+		
+	}
+	
+	public DefaultLineMapper<Employee> lineMapper(){
+		
+		 DefaultLineMapper<Employee> employeeLineMapper = new DefaultLineMapper<>();
+		 
+	        employeeLineMapper.setLineTokenizer(createEmployeeLineTokenizer());
+	 
+	        employeeLineMapper.setFieldSetMapper(createEmployeeInformationMapper());
+	 
+	        return employeeLineMapper;
+		
+	}
+	
+	private LineTokenizer createEmployeeLineTokenizer() {
+        DelimitedLineTokenizer employeeLineTokenizer = new DelimitedLineTokenizer();
+        employeeLineTokenizer.setDelimiter(",");
+        employeeLineTokenizer.setNames(new String[]{
+                "name", 
+                "emailAddress", 
+                "purchasedPackage"
+        });
+        return employeeLineTokenizer;
+    }
+ 
+    private FieldSetMapper<Employee> createEmployeeInformationMapper() {
+        BeanWrapperFieldSetMapper<Employee> employeeInformationMapper =     new BeanWrapperFieldSetMapper<>();
+        employeeInformationMapper.setTargetType(Employee.class);
+        return employeeInformationMapper;
+    }
 
 }

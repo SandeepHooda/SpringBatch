@@ -10,12 +10,9 @@ import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.ResourceLoader;
 
 import sandeep.SpringBatch.listener.JobCompletionListener;
 import sandeep.SpringBatch.step.Processor;
-import sandeep.SpringBatch.step.Reader;
 import sandeep.SpringBatch.step.Writer;
 
 @Configuration
